@@ -14,7 +14,7 @@ if __name__ == '__main__':
             texts.append(listing.text)
 
     vect = CountVectorizer(ngram_range=(1,2),stop_words='english')
-    matrix = vect.fit_transform(texts)
+    matrix = vect.fit_transform(texts) # restituisce la matrice termini-doc
     print(len(vect.get_feature_names()))
     freqs = [(word, matrix.getcol(idx).sum()) for word, idx in vect.vocabulary_.items()]
     # sort from largest to smallest
