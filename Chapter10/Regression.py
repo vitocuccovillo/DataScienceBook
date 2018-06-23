@@ -4,6 +4,7 @@ import seaborn as sns
 from sklearn.linear_model import LinearRegression
 import numpy as np
 from sklearn import metrics
+from sklearn.cross_validation import train_test_split
 
 url = "https://raw.githubusercontent.com/justmarkham/DAT8/master/data/bikeshare.csv"
 bikes = pd.read_csv(url)
@@ -19,7 +20,7 @@ print("Correlazione: " + str(bikes[['count','temp']].corr()))
 
 feature_cols = ['temp']
 feature_colsOther = ['temp','season','weather','humidity']
-X = bikes[feature_colsOther]
+X = bikes[feature_cols]
 y = bikes['count']
 
 linreg = LinearRegression()
@@ -40,3 +41,11 @@ plt.show()
 y_pred = linreg.predict(X)
 rmse = np.sqrt(metrics.mean_squared_error(y,y_pred))
 print("errore predizione: " + str(rmse))
+
+# TRAIN-TEST SPLIT
+X_train, X_test, y_train, y_test = train_test_split(X,y)
+linreg = LinearRegression()
+linreg.fit(X_train,y_train)
+y_pred = linreg.predict(X_test) # effettua le predizioni sul test set
+test_error = np.sqrt(metrics.mean_squared_error(y_test, y_pred)) #calcola l'errore sul test
+print("Errore sul test set: " + str(test_error))
