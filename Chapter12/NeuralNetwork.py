@@ -14,9 +14,11 @@ import sys
 digits = datasets.load_digits()
 X, y = digits.data, digits.target
 
-ds = ClassificationDataSet(64,10,nb_classes = 10)
-test = ClassificationDataSet(64,10,nb_classes = 10)
-training = ClassificationDataSet(64,10,nb_classes = 10)
+print(X[0].shape)
+
+ds = ClassificationDataSet(64, 10, nb_classes = 10)
+test = ClassificationDataSet(64, 10, nb_classes = 10)
+training = ClassificationDataSet(64, 10, nb_classes = 10)
 
 for k in xrange(len(X)):
     ds.addSample(ravel(X[k]), y[k])
@@ -39,16 +41,13 @@ print(training.outdim)
 
 fnn = buildNetwork(training.indim, 64, training.outdim, outclass=SoftmaxLayer)
 trainer = BackpropTrainer(fnn, dataset = training, momentum=0.1, learningrate=0.01, verbose=True, weightdecay=0.01)
-
 trainer.trainEpochs(10)
+
+print(percentError(trainer.testOnClassData(), training['class']))
 print(percentError(trainer.testOnClassData(dataset=test), test['class']))
 
 plt.imshow(digits.images[0], cmap=plt.cm.gray_r, interpolation='nearest')
 plt.show()
 
-print(fnn.activate(X[0]))
-
-fnn = buildNetwork(training.indim, 64, training.outdim, outclass=SoftmaxLayer)
-trainer = BackpropTrainer(fnn, dataset= training, momentum=0.1, learningrate=0.01, verbose=True, weightdecay=0.01)
-trainer.trainEpochs(10)
-print(percentError(trainer.testOnClassData(dataset=test), test['class']))
+for i in range(0,10):
+    print(fnn.activate(X[i]))
