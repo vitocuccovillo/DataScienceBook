@@ -2,6 +2,7 @@ from sklearn import datasets, metrics
 import tensorflow as tf
 import numpy as np
 from sklearn.cross_validation import train_test_split
+from sklearn.linear_model import LogisticRegression
 
 iris = datasets.load_iris()
 X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target)
@@ -28,3 +29,26 @@ print("accuracy: " + str(accuracy))
 new_samples = np.array([[6.4,3.2,4.5,1.5],[5.8,3.1,5.0,1.7]], dtype=float)
 y = classifier.predict(new_samples)
 print(str(y))
+
+### LOGISTIC REGRESSION ###
+logreg = LogisticRegression()
+logreg.fit(X_train, y_train)
+y_predicted = logreg.predict(X_test) # testa sull'insieme di collaudo
+accuracy = metrics.accuracy_score(y_predicted, y_test)
+print("LOGREG accuracy: " + str(accuracy))
+
+### AUMENTARE LE ITERAZIONI NELLA NN ###
+classifier.fit(x=X_train, y=y_train,steps=2000) #iterazioni
+accuracy = classifier.evaluate(x=X_test, y=y_test)['accuracy']
+print("accuracy 2000 iter: " + str(accuracy))
+
+### DEEP NEURAL NETWORK ###
+classifier = tf.contrib.learn.DNNClassifier(feature_columns=feature_columns,
+                                            hidden_units=[10,20,10],
+                                            optimizer=optimizer,
+                                            n_classes=3)
+
+classifier.fit(x=X_train,y=y_train, steps=3000)
+
+accuracy_score = classifier.evaluate(x=X_test, y=y_test)['accuracy']
+print("Accuracy DNN: " + str(accuracy_score))
