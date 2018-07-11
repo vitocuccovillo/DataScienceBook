@@ -1,2 +1,2 @@
 # DataScienceBook
-Exercises from Data Science Book
+Exercises from Data Science Book (Sinan Ozdemir)
